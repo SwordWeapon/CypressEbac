@@ -21,21 +21,26 @@ describe("Funcionalidade: Cadastro", () => {
       .should("contain", "Detalhes da conta modificados com sucesso.");
   });
 
-  it("Deve completar o cadastro com sucesso - Boa pratica (uso de var) ", () => {
+  it.only("Deve completar o cadastro com sucesso - Boa pratica (uso de var) ", () => {
     var nome = faker.person.firstName();
     var email = faker.internet.email(nome); // Colocar a var firstName primeiro para gerar um nome relacionado ao e-mail.
     var sobrenome = faker.person.lastName();
     cy.get("#reg_email").type(email);
     cy.get("#reg_password").type("teste@123");
     cy.get(":nth-child(4) > .button").click();
+    cy.wait(1000);
 
     cy.get(".woocommerce-MyAccount-content > :nth-child(2)").should("exist");
 
     cy.get(".woocommerce-MyAccount-navigation-link--edit-account > a").click();
+    cy.wait(1000);
 
-    cy.get("#account_first_name").type(nome);
-    cy.get("#account_last_name").type(sobrenome);
+    cy.get("#account_first_name").type(nome).should("be.visible");
+    cy.wait(6000);
+    cy.get("#account_last_name").type(sobrenome).should("be.visible");
+    cy.wait(6000);
     cy.get(".woocommerce-Button").click();
+    cy.wait(1000);
     cy.get(".woocommerce-message")
       .should("be.visible")
       .should("contain", "Detalhes da conta modificados com sucesso.");
