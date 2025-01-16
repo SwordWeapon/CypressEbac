@@ -1,3 +1,5 @@
+const perfil = require('../../fixtures/perfil.json')
+
 describe("Funcionalidade: Login", () => {
   beforeEach(() => {
     cy.visit("http://lojaebac.ebaconline.art.br/minha-conta/");
@@ -7,7 +9,7 @@ describe("Funcionalidade: Login", () => {
     cy.screenshot();
   });
 
-  it.only("Deve fazer login com sucesso", () => {
+  it("Deve fazer login com sucesso", () => {
     cy.get("#username").type("matheuscarmofeliciano@gmail.com");
     cy.get("#password").type("qateste123");
     cy.get(".woocommerce-form > .button").click();
@@ -16,7 +18,7 @@ describe("Funcionalidade: Login", () => {
       "Olá, matheuscarmofeliciano (não é matheuscarmofeliciano? Sair)"
     );
   });
-  it.only("Deverá exibir uma mensagem de erro ao inserir usuário inválido", () => {
+  it("Deverá exibir uma mensagem de erro ao inserir usuário inválido", () => {
     cy.get("#username").type("matheuscarmofeliciano@teste.com");
     cy.get("#password").type("qateste123");
     cy.get(".woocommerce-form > .button").click();
@@ -26,7 +28,7 @@ describe("Funcionalidade: Login", () => {
     );
     cy.get(".woocommerce-error").should("exist");
   });
-  it.only("Deve exibir uma mensagem de erro ao inserir senha inválida", () => {
+  it("Deve exibir uma mensagem de erro ao inserir senha inválida", () => {
     cy.get("#username").type("matheuscarmofeliciano@gmail.com");
     cy.get("#password").type("qateste4123");
     cy.get(".woocommerce-form > .button").click();
@@ -35,5 +37,27 @@ describe("Funcionalidade: Login", () => {
       "Erro: A senha fornecida para o e-mail matheuscarmofeliciano@gmail.com está incorreta. Perdeu a senha?"
     );
     cy.get(".woocommerce-error").should("exist");
+  });
+  
+  it('Deve fazer login com sucesso - Usando massa de dados', () => {
+    cy.get("#username").type(perfil.usuario)
+    cy.get("#password").type(perfil.senha)
+    cy.get(".woocommerce-form > .button").click();
+    cy.get(".woocommerce-MyAccount-content > :nth-child(2)").should(
+      "contain",
+      "Olá, matheuscarmofeliciano (não é matheuscarmofeliciano? Sair)"
+    );
+  });
+  
+  it.only('Deve fazer login com sucesso - Usando Fixture', () => {
+    cy.fixture('perfil').then(dados =>{
+      cy.get("#username").type(dados.usuario)
+    cy.get("#password").type(dados.senha, {log: false})
+    cy.get(".woocommerce-form > .button").click();
+    cy.get(".woocommerce-MyAccount-content > :nth-child(2)").should(
+      "contain",
+      "Olá, matheuscarmofeliciano (não é matheuscarmofeliciano? Sair)"
+    );
+    })
   });
 });
