@@ -21,7 +21,14 @@ describe("Funcionalidade: Cadastro", () => {
       .should("contain", "Detalhes da conta modificados com sucesso.");
   });
 
-  it.only("Deve completar o cadastro com sucesso - Boa pratica (uso de var) ", () => {
+  it.only('Deve completar o cadastro com sucesso - Usando commands customizaveis ', () => {
+    cy.preCadastro(faker.internet.email(), 'teste@123', faker.person.firstName(), faker.person.lastName());
+    cy.get(".woocommerce-message")
+      .should("be.visible")
+      .should("contain", "Detalhes da conta modificados com sucesso.");
+  });
+
+  it("Deve completar o cadastro com sucesso - Boa pratica (uso de var) ", () => {
     var nome = faker.person.firstName();
     var email = faker.internet.email(nome); // Colocar a var firstName primeiro para gerar um nome relacionado ao e-mail.
     var sobrenome = faker.person.lastName();
@@ -45,4 +52,5 @@ describe("Funcionalidade: Cadastro", () => {
       .should("be.visible")
       .should("contain", "Detalhes da conta modificados com sucesso.");
   });
+  
 });
